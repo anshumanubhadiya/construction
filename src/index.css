@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #faf7f1;
+  --color-cream: #f2ecdd;
+  --color-parchment: #e9e0cb;
+  --color-ink: #1b1e27;
+  --color-ink2: #262b3a;
+  --color-night: #14161d;
+  --color-night2: #1d212c;
+  --color-line: #e5dcc6;
+  --color-linen: #efe8d6;
+
+  --color-gold: #e8a20c;
+  --color-goldsoft: #f6c453;
+  --color-golddeep: #9a6200;
+  --color-bronze: #7c4a12;
+
+  --color-forest: #0b6b4f;
+  --color-mint: #d9f2e6;
+  --color-clay: #c2491d;
+  --color-blush: #fbe3d8;
+  --color-steel: #2563eb;
+  --color-skywash: #dbe7ff;
+  --color-plum: #7c3aed;
+  --color-plumwash: #e7dcff;
+  --color-tealpop: #0d9488;
+  --color-tealwash: #d3f3ef;
+  --color-amberwash: #fdf0cd;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8cba6, #b7a67e);
+  border-radius: 99px;
+  border: 2px solid var(--color-paper);
+}
+.dark-scroll::-webkit-scrollbar-thumb { border-color: var(--color-night); }
+
+/* ---------- shimmer skeleton ---------- */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #ece4d1 25%, #f7f2e4 45%, #ece4d1 65%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+.shimmer-dark {
+  background: linear-gradient(90deg, #232838 25%, #2e3547 45%, #232838 65%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+/* ---------- floating ---------- */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+.animate-floaty-slow { animation: floaty 8s ease-in-out infinite; }
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 28s linear infinite; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 22s linear infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+.animate-pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+/* ---------- blueprint grid backdrop ---------- */
+.blueprint {
+  background-image:
+    linear-gradient(rgba(232, 162, 12, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 162, 12, 0.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.blueprint-dark {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* ---------- cards ---------- */
+.card-paper {
+  background: #fffdf7;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 1px 2px rgba(60, 45, 10, 0.06), 0 12px 32px -18px rgba(60, 45, 10, 0.25);
+}
+.card-night {
+  background: linear-gradient(160deg, #1d212c, #14161d);
+  border: 1px solid #2b3143;
+}
+.tap-lift { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.tap-lift:hover { transform: translateY(-3px); }
+
+/* ---------- inputs ---------- */
+.field {
+  width: 100%;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-line);
+  background: #fffdf8;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(232, 162, 12, 0.18);
+}
+.field::placeholder { color: #a89c83; font-weight: 400; }
+select.field { appearance: none; }
+
+/* ---------- toast progress ---------- */
+@keyframes toastbar { from { width: 100%; } to { width: 0%; } }
+.toast-bar { animation: toastbar 3.4s linear forwards; }
+
+/* ---------- checkmark draw ---------- */
+.check-path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: drawcheck 0.5s 0.1s ease forwards;
+}
+@keyframes drawcheck { to { stroke-dashoffset: 0; } }
+
+/* ---------- print: only print-root ---------- */
+@media print {
+  body * { visibility: hidden; }
+  #print-root, #print-root * { visibility: visible; }
+  #print-root { position: absolute; inset: 0; }
+}
