@@ -184,11 +184,14 @@ export const useApp = create<AppState>()(
         try {
           const me = await cloudSignIn(email, password);
           if (me.status !== 'active') {
-            await cloudSignOut();
             if (me.status === 'rejected') {
+              await cloudSignOut();
+              set({ authProfile: me, authChecked: true });
               return { ok: false, message: 'Your request was declined. Contact the office.' };
             }
-            set({ authProfile: null, authChecked: true });
+            // pending → keep profile for Pending page, but clear session
+            set({ authProfile: me, authChecked: true });
+            await cloudSignOut().catch(() => undefined);
             return { ok: false, message: 'pending', needsConfirmation: true };
           }
           set({ authProfile: me, authChecked: true });
@@ -209,19 +212,31 @@ export const useApp = create<AppState>()(
       signup: async (d) => {
         try {
           const res = await cloudSignUp(d);
+          // active immediately (first user = admin, or valid join code)
           if (res.profile?.status === 'active') {
             set({ authProfile: res.profile, authChecked: true });
             startRealtime();
             void get().refreshFromCloud();
             return { ok: true, message: `Welcome aboard, ${res.profile.name.split(' ')[0]}!`, role: res.profile.role };
           }
+          // pending profile exists (email confirmation OFF, awaiting owner approval)
+          if (res.profile) {
+            set({ authProfile: res.profile, authChecked: true });
+            await cloudSignOut().catch(() => undefined);
+            return { ok: false, message: 'pending', needsConfirmation: res.needsConfirmation };
+          }
+          // no session → email confirmation required (Supabase setting ON)
           if (res.needsConfirmation) {
+            set({ authProfile: null, authChecked: true });
             return {
-              ok: false, needsConfirmation: true,
-              message: 'Account created! Confirm your email, then log in. If you signed up as client/worker, the owner will approve access.',
+              ok: false,
+              needsConfirmation: true,
+              message: 'pending',
             };
           }
+          // fallback: profile not yet visible but signup succeeded
           set({ authProfile: null, authChecked: true });
+          await cloudSignOut().catch(() => undefined);
           return { ok: false, needsConfirmation: true, message: 'pending' };
         } catch (err: unknown) {
           return { ok: false, message: (err as Error)?.message || 'Signup failed.' };

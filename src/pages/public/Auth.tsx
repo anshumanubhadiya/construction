@@ -116,7 +116,7 @@ export function Login() {
     const res = await login(email, password);
     setBusy(false);
     if (!res.ok) {
-      if (res.message === 'pending') { navigate('/pending'); return; }
+      if (res.message === 'pending' || res.needsConfirmation) { navigate('/pending'); return; }
       setError(res.message);
       return;
     }
@@ -213,6 +213,7 @@ export function Signup() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setError('Please enter a valid email address.');
     if (form.password.length < 8) return setError('Password must be at least 8 characters.');
     if (!/^[0-9+\-\s]{10,}$/.test(form.phone.trim())) return setError('Please enter a valid phone number.');
+    if (mode === 'team' && !form.joinCode.trim()) return setError('Please enter your team join code.');
     setBusy(true);
     const res = await signup(
       mode === 'team'
@@ -221,7 +222,16 @@ export function Signup() {
     );
     setBusy(false);
     if (!res.ok) {
-      if (res.message === 'pending') { navigate('/pending'); return; }
+      // pending or email-confirmation required → not an error, go to pending screen
+      if (res.message === 'pending' || res.needsConfirmation) {
+        toast.success(
+          res.needsConfirmation
+            ? 'Account created! Please check your email to confirm, then wait for owner approval.'
+            : 'Request received! Awaiting owner approval.',
+        );
+        navigate('/pending');
+        return;
+      }
       setError(res.message);
       return;
     }

@@ -18,6 +18,15 @@ function friendly(err: { message?: string } | null): string {
   if (m.includes('email not confirmed') || m.includes('not confirmed')) return CloudAuthError.NotConfirmed;
   if (m.includes('rate limit') || m.includes('too many')) return CloudAuthError.RateLimit;
   if (m.includes('failed to fetch') || m.includes('network')) return CloudAuthError.Network;
+  if (m.includes('user already registered') || m.includes('already registered') || m.includes('already exists')) {
+    return 'This email is already registered. Please login instead.';
+  }
+  if (m.includes('database error saving new user') || m.includes('database error')) {
+    return 'Account creation failed due to a database setup issue. Please make sure the Supabase SQL has been run (see /setup), then try again.';
+  }
+  if (m.includes('password should be at least 6')) {
+    return 'Password must be at least 8 characters.';
+  }
   return err?.message || 'Something went wrong. Please try again.';
 }
 
@@ -93,8 +102,14 @@ export async function cloudSignUp(d: CloudSignUpInput): Promise<{
   if (error) throw new Error(friendly(error));
   if (!data.user) throw new Error('Signup failed — please try again.');
   // email confirmation off → session returned → we can load the profile now
+  // The DB trigger may take a moment, so retry a few times
   if (data.session) {
-    const me = await fetchMyProfile(data.user.id).catch(() => null);
+    let me: ProfileRow | null = null;
+    for (let i = 0; i < 4; i++) {
+      me = await fetchMyProfile(data.user.id).catch(() => null);
+      if (me) break;
+      await new Promise((r) => setTimeout(r, 500));
+    }
     return { needsConfirmation: false, profile: me };
   }
   return { needsConfirmation: true, profile: null };
