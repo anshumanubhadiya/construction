@@ -199,7 +199,12 @@ export const useApp = create<AppState>()(
           void get().refreshFromCloud();
           return { ok: true, message: `Welcome back, ${me.name.split(' ')[0]}!`, role: me.role };
         } catch (err: unknown) {
-          return { ok: false, message: (err as Error)?.message || 'Login failed.' };
+          const raw = err as { message?: string };
+          let msg = raw?.message || 'Login failed.';
+          if (msg === '{}' || msg === '[object Object]' || typeof msg !== 'string') {
+            try { const s = JSON.stringify(err); msg = s && s !== '{}' ? s : 'Login failed.'; } catch { msg = 'Login failed.'; }
+          }
+          return { ok: false, message: msg };
         }
       },
 
@@ -220,26 +225,61 @@ export const useApp = create<AppState>()(
             return { ok: true, message: `Welcome aboard, ${res.profile.name.split(' ')[0]}!`, role: res.profile.role };
           }
           // pending profile exists (email confirmation OFF, awaiting owner approval)
+          // This is client/worker flow - request goes to admin
           if (res.profile) {
             set({ authProfile: res.profile, authChecked: true });
             await cloudSignOut().catch(() => undefined);
-            return { ok: false, message: 'pending', needsConfirmation: res.needsConfirmation };
+            return { ok: false, message: 'pending', needsConfirmation: res.needsConfirmation, role: res.profile.role };
           }
           // no session → email confirmation required (Supabase setting ON)
+          // Still treat as pending - admin will see after email confirmation
           if (res.needsConfirmation) {
-            set({ authProfile: null, authChecked: true });
+            // Keep a temporary profile for pending page display
+            const tempProfile = {
+              id: 'temp',
+              name: d.name,
+              email: d.email,
+              phone: d.phone,
+              role: d.role as Role,
+              active: false,
+              status: 'pending' as const,
+              createdAt: new Date().toISOString(),
+            } as ProfileRow;
+            set({ authProfile: tempProfile, authChecked: true });
             return {
               ok: false,
               needsConfirmation: true,
               message: 'pending',
+              role: d.role as Role,
             };
           }
-          // fallback: profile not yet visible but signup succeeded
-          set({ authProfile: null, authChecked: true });
+          // fallback: profile not yet visible but signup succeeded - still pending
+          const fallbackProfile = {
+            id: 'temp',
+            name: d.name,
+            email: d.email,
+            phone: d.phone,
+            role: d.role as Role,
+            active: false,
+            status: 'pending' as const,
+            createdAt: new Date().toISOString(),
+          } as ProfileRow;
+          set({ authProfile: fallbackProfile, authChecked: true });
           await cloudSignOut().catch(() => undefined);
-          return { ok: false, needsConfirmation: true, message: 'pending' };
+          return { ok: false, needsConfirmation: true, message: 'pending', role: d.role as Role };
         } catch (err: unknown) {
-          return { ok: false, message: (err as Error)?.message || 'Signup failed.' };
+          const raw = err as { message?: unknown };
+          let msg = typeof raw?.message === 'string' ? raw.message : '';
+          if (!msg || msg === '{}' || msg === '[object Object]') {
+            try {
+              const s = JSON.stringify(err);
+              msg = s && s !== '{}' && s !== '"{}"' ? s : 'Signup failed - please try again with different email';
+            } catch {
+              msg = 'Signup failed - please try again';
+            }
+          }
+          if (msg === '{}' || msg === '[object Object]') msg = 'Signup failed - please try again';
+          return { ok: false, message: msg };
         }
       },
 

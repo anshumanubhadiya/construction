@@ -105,13 +105,41 @@ export async function cloudSignUp(d: CloudSignUpInput): Promise<{
   // The DB trigger may take a moment, so retry a few times
   if (data.session) {
     let me: ProfileRow | null = null;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       me = await fetchMyProfile(data.user.id).catch(() => null);
       if (me) break;
-      await new Promise((r) => setTimeout(r, 500));
+      await new Promise((r) => setTimeout(r, 600));
+    }
+    // Fallback: if trigger didn't create profile (e.g. RLS issue), try to create manually
+    // This ensures admin ko request dikhegi even if trigger fails
+    if (!me) {
+      try {
+        const isFirst = await isFreshInstall().catch(() => false);
+        const fallbackRole = isFirst ? 'admin' : d.role === 'staff' || d.role === 'supervisor' ? 'client' : d.role;
+        const fallbackStatus = isFirst ? 'active' : 'pending';
+        const { data: inserted, error: insErr } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            name: d.name.trim(),
+            phone: d.phone.trim(),
+            email: d.email.trim().toLowerCase(),
+            role: fallbackRole,
+            status: fallbackStatus,
+          })
+          .select('*')
+          .maybeSingle();
+        if (!insErr && inserted) {
+          me = profileFromRow(inserted);
+        }
+      } catch {
+        // ignore fallback failure - still return pending so UI moves forward
+      }
     }
     return { needsConfirmation: false, profile: me };
   }
+  // No session → email confirmation ON, profile will be created after email confirm
+  // Still consider request sent to admin (will appear after confirmation)
   return { needsConfirmation: true, profile: null };
 }
 
