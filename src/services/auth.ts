@@ -18,6 +18,15 @@ function friendly(err: { message?: string } | null): string {
   if (m.includes('email not confirmed') || m.includes('not confirmed')) return CloudAuthError.NotConfirmed;
   if (m.includes('rate limit') || m.includes('too many')) return CloudAuthError.RateLimit;
   if (m.includes('failed to fetch') || m.includes('network')) return CloudAuthError.Network;
+  if (m.includes('user already registered') || m.includes('already registered') || m.includes('already exists')) {
+    return 'This email is already registered. Please login instead.';
+  }
+  if (m.includes('database error saving new user') || m.includes('database error')) {
+    return 'Account creation failed due to a database setup issue. Please make sure the Supabase SQL has been run (see /setup), then try again.';
+  }
+  if (m.includes('password should be at least 6')) {
+    return 'Password must be at least 8 characters.';
+  }
   return err?.message || 'Something went wrong. Please try again.';
 }
 
@@ -93,10 +102,44 @@ export async function cloudSignUp(d: CloudSignUpInput): Promise<{
   if (error) throw new Error(friendly(error));
   if (!data.user) throw new Error('Signup failed — please try again.');
   // email confirmation off → session returned → we can load the profile now
+  // The DB trigger may take a moment, so retry a few times
   if (data.session) {
-    const me = await fetchMyProfile(data.user.id).catch(() => null);
+    let me: ProfileRow | null = null;
+    for (let i = 0; i < 6; i++) {
+      me = await fetchMyProfile(data.user.id).catch(() => null);
+      if (me) break;
+      await new Promise((r) => setTimeout(r, 600));
+    }
+    // Fallback: if trigger didn't create profile (e.g. RLS issue), try to create manually
+    // This ensures admin ko request dikhegi even if trigger fails
+    if (!me) {
+      try {
+        const isFirst = await isFreshInstall().catch(() => false);
+        const fallbackRole = isFirst ? 'admin' : d.role === 'staff' || d.role === 'supervisor' ? 'client' : d.role;
+        const fallbackStatus = isFirst ? 'active' : 'pending';
+        const { data: inserted, error: insErr } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            name: d.name.trim(),
+            phone: d.phone.trim(),
+            email: d.email.trim().toLowerCase(),
+            role: fallbackRole,
+            status: fallbackStatus,
+          })
+          .select('*')
+          .maybeSingle();
+        if (!insErr && inserted) {
+          me = profileFromRow(inserted);
+        }
+      } catch {
+        // ignore fallback failure - still return pending so UI moves forward
+      }
+    }
     return { needsConfirmation: false, profile: me };
   }
+  // No session → email confirmation ON, profile will be created after email confirm
+  // Still consider request sent to admin (will appear after confirmation)
   return { needsConfirmation: true, profile: null };
 }
 

@@ -113,21 +113,31 @@ export function Login() {
       return;
     }
     setBusy(true);
-    const res = await login(email, password);
-    setBusy(false);
-    if (!res.ok) {
-      if (res.message === 'pending') { navigate('/pending'); return; }
-      setError(res.message);
-      return;
+    try {
+      const res = await login(email, password);
+      const msg = typeof res.message === 'string' ? res.message : JSON.stringify(res.message);
+      if (!res.ok) {
+        if (msg === 'pending' || res.needsConfirmation || msg.toLowerCase().includes('pending')) {
+          navigate('/pending', { replace: true });
+          return;
+        }
+        setError(msg === '{}' || msg === '[object Object]' ? 'Login failed - please try again' : msg);
+        return;
+      }
+      toast.success(msg);
+      navigate(
+        res.role === 'admin' || res.role === 'staff' ? '/admin/dashboard'
+        : res.role === 'client' ? '/client/dashboard'
+        : res.role === 'worker' ? '/worker/dashboard'
+        : '/supervisor/dashboard',
+        { replace: true },
+      );
+    } catch (err: unknown) {
+      const m = (err as Error)?.message || 'Login failed';
+      setError(m === '{}' ? 'Login failed - check connection' : m);
+    } finally {
+      setBusy(false);
     }
-    toast.success(res.message);
-    navigate(
-      res.role === 'admin' || res.role === 'staff' ? '/admin/dashboard'
-      : res.role === 'client' ? '/client/dashboard'
-      : res.role === 'worker' ? '/worker/dashboard'
-      : '/supervisor/dashboard',
-      { replace: true },
-    );
   };
 
   return (
@@ -213,25 +223,65 @@ export function Signup() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return setError('Please enter a valid email address.');
     if (form.password.length < 8) return setError('Password must be at least 8 characters.');
     if (!/^[0-9+\-\s]{10,}$/.test(form.phone.trim())) return setError('Please enter a valid phone number.');
+    if (mode === 'team' && !form.joinCode.trim()) return setError('Please enter your team join code.');
     setBusy(true);
-    const res = await signup(
-      mode === 'team'
-        ? { ...form, role: 'staff', joinCode: form.joinCode.trim() }
-        : { ...form, role: 'client' },
-    );
-    setBusy(false);
-    if (!res.ok) {
-      if (res.message === 'pending') { navigate('/pending'); return; }
-      setError(res.message);
-      return;
+    try {
+      const res = await signup(
+        mode === 'team'
+          ? { ...form, role: 'staff', joinCode: form.joinCode.trim() }
+          : { ...form, role: 'client' },
+      );
+      // Normalize message - avoid {} display
+      const rawMsg = res.message as unknown;
+      const msg = typeof rawMsg === 'string' ? rawMsg : (() => { try { return JSON.stringify(rawMsg) } catch { return String(rawMsg) } })() || 'Unknown response';
+
+      if (!res.ok) {
+        // pending or email-confirmation required → NOT an error, request goes to admin
+        const isPending = msg === 'pending' || !!res.needsConfirmation || msg.toLowerCase().includes('confirm') || msg.toLowerCase().includes('pending') || msg.toLowerCase().includes('approval');
+        if (isPending) {
+          toast.success(
+            res.needsConfirmation
+              ? 'Account created! Email confirm karo, fir admin approval ka wait karo. Admin ko request chali gayi hai.'
+              : 'Request received! Admin ko request chali gayi hai - owner approval ka wait karo.',
+          );
+          navigate('/pending', { replace: true });
+          return;
+        }
+        // Real error
+        let displayMsg = msg;
+        if (displayMsg === '{}' || displayMsg === '[object Object]' || displayMsg === '""' || !displayMsg.trim()) {
+          displayMsg = 'Signup failed - please try again with different email';
+        }
+        setError(displayMsg);
+        return;
+      }
+      toast.success(msg);
+      // If client/worker becomes active instantly (first user or valid join code), go to dashboard, else pending
+      const target =
+        res.role === 'admin' || res.role === 'staff' || res.role === 'supervisor'
+          ? res.role === 'supervisor' ? '/supervisor/dashboard' : '/admin/dashboard'
+          : res.role === 'client' || res.role === 'worker'
+            ? '/pending'
+            : '/login';
+      navigate(target, { replace: true });
+    } catch (err: unknown) {
+      let errMsg = 'Signup failed - please try again';
+      const e = err as { message?: string };
+      if (typeof e?.message === 'string' && e.message.trim() && e.message.trim() !== '{}' && e.message !== '[object Object]') {
+        errMsg = e.message;
+      } else {
+        try {
+          const s = JSON.stringify(err);
+          if (s && s !== '{}' && s !== '"{}"' && s.length < 200) errMsg = s;
+        } catch {
+          // ignore
+        }
+      }
+      if (errMsg === '{}' || errMsg === '[object Object]') errMsg = 'Signup failed - please check details and try again';
+      setError(errMsg);
+    } finally {
+      setBusy(false);
     }
-    toast.success(res.message);
-    navigate(
-      res.role === 'admin' || res.role === 'staff' || res.role === 'supervisor'
-        ? res.role === 'supervisor' ? '/supervisor/dashboard' : '/admin/dashboard'
-        : '/login',
-      { replace: true },
-    );
   };
 
   return (
@@ -277,7 +327,7 @@ export function Signup() {
         <FieldRow icon={<User size={17} />}>
           <input value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Full name" className={inputWithIcon} />
         </FieldRow>
-        <FieldRow icon={<Phone size={17} />}>
+        <FieldRow icon={<Phone size={17} />} >
           <input value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="Phone number" inputMode="tel" className={inputWithIcon} />
         </FieldRow>
         <FieldRow icon={<Mail size={17} />}>
@@ -328,16 +378,17 @@ export function Pending() {
         <h2 className="font-display mt-5 text-2xl font-bold">Request received!</h2>
         <p className="mt-2 text-sm leading-relaxed font-medium text-ink/55">
           {me ? (
-            <>Hi <span className="font-extrabold">{me.name.split(' ')[0]}</span>, your account is <span className="font-extrabold text-golddeep">pending approval</span>. The owner will verify and activate it shortly.</>
+            <>Hi <span className="font-extrabold">{me.name.split(' ')[0]}</span>, your account is <span className="font-extrabold text-golddeep">pending approval</span>. The owner will verify and activate it shortly. Admin ko request chali gayi hai.</>
           ) : (
-            <>Your account is created. <span className="font-extrabold text-golddeep">Confirm your email</span> (if asked), then wait for the owner to activate it — usually within a few hours.</>
+            <>Your account is created. <span className="font-extrabold text-golddeep">Confirm your email</span> (if asked), then wait for the owner to activate it — usually within a few hours. Admin ko request chali gayi hai.</>
           )}
         </p>
         <div className="mt-5 rounded-2xl bg-amberwash/70 p-4 text-left text-[13px] leading-relaxed font-semibold text-bronze">
           What happens next?
           <ul className="mt-2 list-disc space-y-1 pl-5 font-medium">
-            <li>Owner links your login to your client / worker record</li>
-            <li>You can then login and see your own dashboard</li>
+            <li>Admin / Owner ko Users page pe tumhari request dikhegi</li>
+            <li>Owner tumhare login ko client / worker record se link karega</li>
+            <li>Uske baad tum login karke apna dashboard dekh paoge</li>
           </ul>
         </div>
         <Link to="/login" className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-night py-3 text-sm font-extrabold text-white">
@@ -358,7 +409,7 @@ export function Forgot() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
       setMsg('');
       return toast.error('Please enter a valid email address');
     }
