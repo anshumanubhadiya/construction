@@ -11,7 +11,7 @@ function showCrash(msg: string) {
   box.id = 'sf-err';
   box.setAttribute(
     'style',
-    'position:fixed;right:16px;bottom:16px;z-index:9999;max-width:360px;background:#C2491D;color:#fff;' +
+    'position:fixed;right:16px;bottom:16px;z-index:9999;max-width:360px;background:#E0603C;color:#fff;' +
     'padding:14px 40px 14px 16px;border-radius:16px;font:600 12.5px/1.5 system-ui;box-shadow:0 12px 40px rgba(0,0,0,.35)',
   );
   box.textContent = 'Page error (safe to screenshot): ' + msg;

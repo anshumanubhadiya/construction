@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   const costSplit = [
     { name: 'Labour', value: totals.labour, color: '#2563eb' },
-    { name: 'Materials', value: totals.material, color: '#E8A20C' },
+    { name: 'Materials', value: totals.material, color: '#F0B429' },
     { name: 'Other expenses', value: totals.expense, color: '#7c3aed' },
     { name: 'Vehicles', value: totals.vehicle, color: '#0d9488' },
   ];
@@ -95,12 +95,12 @@ export default function Dashboard() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
   const stats = [
-    { label: 'Total Income', value: totals.income, icon: <Banknote size={21} />, bg: 'bg-mint', fg: 'text-forest', bar: '#0B6B4F', sub: `${inrShort(monthIncome)} this month` },
+    { label: 'Total Income', value: totals.income, icon: <Banknote size={21} />, bg: 'bg-mint', fg: 'text-forest', bar: '#2FA37C', sub: `${inrShort(monthIncome)} this month` },
     { label: 'Labour Cost', value: totals.labour, icon: <HardHat size={21} />, bg: 'bg-skywash', fg: 'text-steel', bar: '#2563eb', sub: `${inrShort(monthLabour)} this month` },
-    { label: 'Material Cost', value: totals.material, icon: <Package size={21} />, bg: 'bg-amberwash', fg: 'text-golddeep', bar: '#E8A20C', sub: `${s.materials.filter((m) => !m.paid).length} bills unpaid` },
+    { label: 'Material Cost', value: totals.material, icon: <Package size={21} />, bg: 'bg-amberwash', fg: 'text-golddeep', bar: '#F0B429', sub: `${s.materials.filter((m) => !m.paid).length} bills unpaid` },
     { label: 'Other Expenses', value: totals.expense, icon: <Receipt size={21} />, bg: 'bg-plumwash', fg: 'text-plum', bar: '#7c3aed', sub: `${s.expenses.length} entries total` },
     { label: 'Vehicle Cost', value: totals.vehicle, icon: <Truck size={21} />, bg: 'bg-tealwash', fg: 'text-tealpop', bar: '#0d9488', sub: `${inrShort(monthVehicle)} this month` },
-    { label: 'Net Profit', value: totals.net, icon: <Wallet size={21} />, bg: totals.net >= 0 ? 'bg-mint' : 'bg-blush', fg: totals.net >= 0 ? 'text-forest' : 'text-clay', bar: totals.net >= 0 ? '#0B6B4F' : '#C2491D', sub: totals.net >= 0 ? 'Business is in profit' : 'Costs exceed income' },
+    { label: 'Net Profit', value: totals.net, icon: <Wallet size={21} />, bg: totals.net >= 0 ? 'bg-mint' : 'bg-blush', fg: totals.net >= 0 ? 'text-forest' : 'text-clay', bar: totals.net >= 0 ? '#2FA37C' : '#E0603C', sub: totals.net >= 0 ? 'Business is in profit' : 'Costs exceed income' },
   ];
 
   const exportPL = () => {
@@ -231,7 +231,7 @@ export default function Dashboard() {
                     </span>
                     <span className="text-xs font-bold text-ink/50">{inr(st.cost)} / {inr(p.budget)} · {st.pctUsed}%</span>
                   </div>
-                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#C2491D' : st.pctUsed >= 70 ? '#E8A20C' : '#0B6B4F'} />
+                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#E0603C' : st.pctUsed >= 70 ? '#F0B429' : '#2FA37C'} />
                 </div>
               ))}
             </div>

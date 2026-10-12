@@ -84,7 +84,7 @@ export function ClientDashboard() {
                   <div className="mb-1.5 flex justify-between text-xs font-bold text-ink/50">
                     <span>Budget used</span><span>{st.pctUsed}%</span>
                   </div>
-                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#C2491D' : '#E8A20C'} />
+                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#E0603C' : '#F0B429'} />
                 </div>
                 <div className="mt-3 flex items-center justify-between border-t border-line/70 pt-3 text-xs font-bold text-ink/50">
                   <span className="flex items-center gap-1.5"><CalendarDays size={13} /> {fmtDate(p.startDate)} → {p.endDate ? fmtDate(p.endDate) : '—'}</span>
@@ -263,7 +263,7 @@ export function ClientProjects() {
                   </div>
                   <div>
                     <div className="mb-1.5 flex justify-between text-xs font-bold text-ink/50"><span>Budget used</span><span>{inr(st.cost)} of {inr(p.budget)}</span></div>
-                    <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#C2491D' : '#E8A20C'} />
+                    <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#E0603C' : '#F0B429'} />
                   </div>
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center">

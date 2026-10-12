@@ -315,7 +315,7 @@ export function MaterialsPage() {
             <Field label="Bill number" hint="Optional"><input value={form.billNumber ?? ''} onChange={(e) => set('billNumber', e.target.value)} placeholder="BL-2601" className={inputCls()} /></Field>
             <div className="flex items-end pb-2">
               <label className="flex cursor-pointer items-center gap-2.5 rounded-xl bg-ink/5 px-4 py-2.5 text-sm font-bold">
-                <input type="checkbox" checked={form.paid} onChange={(e) => set('paid', e.target.checked)} className="h-4.5 w-4.5 accent-[#0B6B4F]" />
+                <input type="checkbox" checked={form.paid} onChange={(e) => set('paid', e.target.checked)} className="h-4.5 w-4.5 accent-[#2FA37C]" />
                 Bill paid
               </label>
             </div>
@@ -471,7 +471,7 @@ export function VehiclesPage() {
             <Field label="Ownership"><select value={form.ownerType} onChange={(e) => set('ownerType', e.target.value)} className={inputCls()}>{['Owned', 'Hired', 'Rented'].map((t) => <option key={t}>{t}</option>)}</select></Field>
             <Field label="Rate per hour (₹)"><input type="number" min={0} value={form.ratePerHour || ''} onChange={(e) => set('ratePerHour', Number(e.target.value))} className={inputCls()} /></Field>
             <div className="flex items-end pb-2">
-              <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold"><input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4.5 w-4.5 accent-[#9A6200]" /> Active</label>
+              <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold"><input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4.5 w-4.5 accent-[#FFC94D]" /> Active</label>
             </div>
           </FormGrid>
           <div className="flex gap-2.5">

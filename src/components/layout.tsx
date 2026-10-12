@@ -124,7 +124,7 @@ function NotificationsMenu() {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="relative grid h-10 w-10 cursor-pointer place-items-center rounded-xl border-[1.5px] border-line bg-white/70 text-ink/70 transition hover:border-gold hover:text-ink"
+        className="relative grid h-10 w-10 cursor-pointer place-items-center rounded-xl border-[1.5px] border-line bg-white/5 text-ink/70 transition hover:border-gold hover:text-ink"
         aria-label="Notifications"
       >
         <BellDot count={unread} />
@@ -186,7 +186,7 @@ function UserMenu({ home }: { home: string }) {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex cursor-pointer items-center gap-2.5 rounded-xl border-[1.5px] border-line bg-white/70 py-1.5 pr-3 pl-1.5 transition hover:border-gold"
+        className="flex cursor-pointer items-center gap-2.5 rounded-xl border-[1.5px] border-line bg-white/5 py-1.5 pr-3 pl-1.5 transition hover:border-gold"
       >
         <Avatar name={me.name} size="sm" />
         <span className="hidden max-w-[110px] truncate text-left text-[13px] leading-tight font-bold sm:block">
@@ -325,7 +325,7 @@ export function AdminLayout() {
           <div className="flex items-center gap-3 px-4 py-3 sm:px-6">
             <button
               onClick={() => setMobileOpen(true)}
-              className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border-[1.5px] border-line bg-white/70 text-ink/70 lg:hidden"
+              className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border-[1.5px] border-line bg-white/5 text-ink/70 lg:hidden"
               aria-label="Open menu"
             >
               <Menu size={20} />
@@ -400,7 +400,7 @@ export function PortalLayout({ tabs, accent = 'bg-gold' }: { tabs: TabItem[]; ac
       </main>
 
       {/* mobile bottom tabs */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-[#fffdf7]/95 backdrop-blur-md md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-night/90 backdrop-blur-md md:hidden">
         <div className="grid" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
           {tabs.map((t) => {
             const active = location.pathname === t.to;

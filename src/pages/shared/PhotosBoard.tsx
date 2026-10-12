@@ -201,11 +201,11 @@ function Lightbox({ photo, projectName, count, onClose, onPrev, onNext }: {
           </div>
           <span className="text-xs font-bold text-white/40">{count}</span>
         </div>
-        <button onClick={onClose} className="absolute -top-3 -right-3 grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-white text-night shadow-lg transition hover:scale-105" aria-label="Close"><X size={16} /></button>
+        <button onClick={onClose} className="absolute -top-3 -right-3 grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-gold text-night shadow-lg transition hover:scale-105" aria-label="Close"><X size={16} /></button>
         {count.split(' / ')[1] !== '1' && (
           <>
-            <button onClick={onPrev} className="absolute top-1/2 -left-4 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/90 text-night shadow-lg transition hover:scale-105 sm:-left-14" aria-label="Previous"><ChevronLeft size={18} /></button>
-            <button onClick={onNext} className="absolute top-1/2 -right-4 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white/90 text-night shadow-lg transition hover:scale-105 sm:-right-14" aria-label="Next"><ChevronRight size={18} /></button>
+            <button onClick={onPrev} className="absolute top-1/2 -left-4 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-gold/90 text-night shadow-lg transition hover:scale-105 sm:-left-14" aria-label="Previous"><ChevronLeft size={18} /></button>
+            <button onClick={onNext} className="absolute top-1/2 -right-4 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-gold/90 text-night shadow-lg transition hover:scale-105 sm:-right-14" aria-label="Next"><ChevronRight size={18} /></button>
           </>
         )}
       </motion.div>

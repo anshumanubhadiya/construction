@@ -89,3 +89,14 @@ describe('previously-crashing pages', () => {
     expect(await mount(<MemoryRouter><AttendancePage /></MemoryRouter>)).toContain('Attendance');
   });
 });
+
+describe('public landing (cinematic redesign)', () => {
+  it('landing renders hero, work, services and contact without crashing', async () => {
+    const Landing = (await import('../src/pages/public/Landing')).default;
+    const text = await mount(<MemoryRouter><Landing /></MemoryRouter>);
+    expect(text).toContain('SARVOTAM');
+    expect(text).toContain('Sarvotam Business Hub');
+    expect(text).toContain('Drop us');
+    expect(text.length).toBeGreaterThan(400);
+  });
+});

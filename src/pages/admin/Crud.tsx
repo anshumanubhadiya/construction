@@ -86,7 +86,7 @@ export function DataTable<T extends { id: string }>({
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
-              className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-line bg-white text-ink/60 transition hover:border-gold disabled:opacity-40"
+              className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-line bg-white/5 text-ink/60 transition hover:border-gold disabled:opacity-40"
             >
               <ChevronLeft size={16} />
             </button>
@@ -94,7 +94,7 @@ export function DataTable<T extends { id: string }>({
             <button
               onClick={() => setPage((p) => Math.min(pages, p + 1))}
               disabled={safePage === pages}
-              className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-line bg-white text-ink/60 transition hover:border-gold disabled:opacity-40"
+              className="grid h-8 w-8 cursor-pointer place-items-center rounded-lg border border-line bg-white/5 text-ink/60 transition hover:border-gold disabled:opacity-40"
             >
               <ChevronRight size={16} />
             </button>
@@ -141,7 +141,7 @@ export function FilterChips<T extends string>({
           className={`cursor-pointer rounded-full px-3.5 py-1.5 text-[12.5px] font-extrabold transition ${
             value === o.value
               ? 'bg-night text-gold shadow'
-              : 'border-[1.5px] border-line bg-white/60 text-ink/55 hover:border-gold/60'
+              : 'border-[1.5px] border-line bg-white/5 text-ink/55 hover:border-gold/60'
           }`}
         >
           {o.label}

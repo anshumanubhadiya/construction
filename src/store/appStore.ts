@@ -759,7 +759,7 @@ export function expenseByCategory(s: S) {
   s.expenses.forEach((e) => map.set(e.category, (map.get(e.category) ?? 0) + Number(e.amount || 0)));
   const colors: Record<string, string> = {
     Fuel: '#e8a20c', Overhead: '#7c3aed', Equipment: '#2563eb', Transport: '#0d9488',
-    Labour: '#c2491d', Food: '#0b6b4f', Safety: '#db2777', Tax: '#64748b', Miscellaneous: '#a16207',
+    Labour: '#c2491d', Food: '#2fa37c', Safety: '#db2777', Tax: '#64748b', Miscellaneous: '#a16207',
   };
   return [...map.entries()].map(([name, value]) => ({ name, value, color: colors[name] ?? '#1b1e27' }));
 }

@@ -99,7 +99,7 @@ export function ProjectsPage() {
                     <span>Budget used</span>
                     <span>{inr(st.cost)} / {inr(p.budget)} · {st.pctUsed}%</span>
                   </div>
-                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#C2491D' : st.pctUsed >= 70 ? '#E8A20C' : '#0B6B4F'} />
+                  <ProgressBar value={st.pctUsed} color={st.pctUsed >= 90 ? '#E0603C' : st.pctUsed >= 70 ? '#F0B429' : '#2FA37C'} />
                 </div>
 
                 <div className="mt-3 grid grid-cols-3 gap-2">
@@ -139,7 +139,7 @@ export function ProjectsPage() {
             <Field label="Status"><select value={form.status} onChange={(e) => set('status', e.target.value as ProjectStatus)} className={inputCls()}>{['Planning', 'Active', 'On Hold', 'Completed'].map((s) => <option key={s}>{s}</option>)}</select></Field>
             <Field label="Start date"><input value={form.startDate ?? ''} onChange={(e) => set('startDate', e.target.value)} type="date" className={inputCls()} /></Field>
             <Field label="Expected end"><input value={form.endDate ?? ''} onChange={(e) => set('endDate', e.target.value)} type="date" className={inputCls()} /></Field>
-            <Field label="Progress %" hint={`${form.progress}%`}><input value={form.progress} onChange={(e) => set('progress', Number(e.target.value))} type="range" min={0} max={100} className="w-full accent-[#9A6200]" /></Field>
+            <Field label="Progress %" hint={`${form.progress}%`}><input value={form.progress} onChange={(e) => set('progress', Number(e.target.value))} type="range" min={0} max={100} className="w-full accent-[#FFC94D]" /></Field>
             <Field label="Description"><input value={form.description ?? ''} onChange={(e) => set('description', e.target.value)} placeholder="G+1 bungalow…" className={inputCls()} /></Field>
           </FormGrid>
           <div className="flex gap-2.5">
@@ -366,7 +366,7 @@ export function WorkersPage() {
             <Field label="IFSC"><input value={form.ifsc ?? ''} onChange={(e) => set('ifsc', e.target.value)} className={inputCls()} /></Field>
             <div className="sm:col-span-2"><Field label="Address"><input value={form.address ?? ''} onChange={(e) => set('address', e.target.value)} placeholder="Village / town" className={inputCls()} /></Field></div>
             <label className="flex cursor-pointer items-center gap-2.5 text-sm font-bold text-ink/70">
-              <input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4.5 w-4.5 accent-[#9A6200]" />
+              <input type="checkbox" checked={form.active} onChange={(e) => set('active', e.target.checked)} className="h-4.5 w-4.5 accent-[#FFC94D]" />
               Active worker
             </label>
           </FormGrid>
