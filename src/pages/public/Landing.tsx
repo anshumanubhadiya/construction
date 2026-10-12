@@ -220,8 +220,8 @@ function Header({ onMenu }: { onMenu: () => void }) {
     >
       <div className="mx-auto flex max-w-[1500px] items-center gap-4 px-5 py-3.5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-gold">
-            <svg viewBox="0 0 32 32" className="h-5 w-5"><path d="M7 22 L16 8 L25 22 Z" fill="#0d0e12" /><rect x="10.5" y="22" width="11" height="3" rx="1" fill="#0d0e12" /></svg>
+          <span className="block h-9 w-9 overflow-hidden rounded-lg bg-[#F5EFE6]">
+            <img src="/logo.svg" alt="Sarvotam Construction logo" className="h-full w-full object-cover" />
           </span>
           <span className="leading-none">
             <span className="font-display block text-[16px] font-bold tracking-tight text-ink">SARVOTAM</span>
@@ -826,8 +826,8 @@ function Footer() {
         <div className="grid gap-10 pb-14 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="grid h-10 w-10 place-items-center rounded-lg bg-gold">
-                <svg viewBox="0 0 32 32" className="h-6 w-6"><path d="M7 22 L16 8 L25 22 Z" fill="#0d0e12" /><rect x="10.5" y="22" width="11" height="3" rx="1" fill="#0d0e12" /></svg>
+              <span className="block h-10 w-10 overflow-hidden rounded-lg bg-[#F5EFE6]">
+                <img src="/logo.svg" alt="Sarvotam Construction logo" className="h-full w-full object-cover" />
               </span>
               <span className="leading-none">
                 <span className="font-display block text-lg font-bold text-ink">SARVOTAM</span>
