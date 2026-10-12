@@ -58,8 +58,8 @@ export function Logo({ dark = false, compact = false }: { dark?: boolean; compac
     <div className="flex items-center gap-2.5">
       <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-night shadow-lg shadow-black/20">
         <svg viewBox="0 0 32 32" className="h-6 w-6">
-          <path d="M7 22 L16 8 L25 22 Z" fill="#E8A20C" />
-          <rect x="10.5" y="22" width="11" height="3" rx="1" fill="#FAF7F1" />
+          <path d="M7 22 L16 8 L25 22 Z" fill="#F0B429" />
+          <rect x="10.5" y="22" width="11" height="3" rx="1" fill="#EDEAE1" />
         </svg>
         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-white/15 ring-inset" />
       </div>
@@ -83,7 +83,7 @@ const btnStyles: Record<BtnVariant, string> = {
   gold: 'bg-gold text-night hover:bg-goldsoft shadow-lg shadow-gold/30',
   dark: 'bg-night text-paper hover:bg-ink2 shadow-lg shadow-black/20',
   ghost: 'text-ink/70 hover:bg-ink/5 hover:text-ink',
-  outline: 'border-[1.5px] border-line bg-white/60 text-ink hover:border-gold hover:bg-amberwash/60',
+  outline: 'border-[1.5px] border-line bg-white/5 text-ink hover:border-gold hover:bg-amberwash/60',
   danger: 'bg-clay text-white hover:brightness-110 shadow-lg shadow-clay/30',
   success: 'bg-forest text-white hover:brightness-110 shadow-lg shadow-forest/30',
 };
@@ -180,7 +180,7 @@ export function Avatar({ name, size = 'md', photo }: { name: string; size?: 'sm'
 }
 
 // ───────── progress bar ─────────
-export function ProgressBar({ value, color = '#E8A20C', height = 8 }: { value: number; color?: string; height?: number }) {
+export function ProgressBar({ value, color = '#F0B429', height = 8 }: { value: number; color?: string; height?: number }) {
   const v = Math.max(0, Math.min(100, value));
   return (
     <div className="w-full overflow-hidden rounded-full bg-ink/10" style={{ height }}>
@@ -347,9 +347,9 @@ export function SuccessCheck({ size = 64 }: { size?: number }) {
       initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 18 }}
     >
-      <circle cx="32" cy="32" r="29" fill="#0B6B4F" opacity="0.12" />
-      <circle cx="32" cy="32" r="29" fill="none" stroke="#0B6B4F" strokeWidth="3" />
-      <path d="M21 33 L29 41 L44 25" fill="none" stroke="#0B6B4F" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="check-path" />
+      <circle cx="32" cy="32" r="29" fill="#2FA37C" opacity="0.12" />
+      <circle cx="32" cy="32" r="29" fill="none" stroke="#2FA37C" strokeWidth="3" />
+      <path d="M21 33 L29 41 L44 25" fill="none" stroke="#2FA37C" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" className="check-path" />
     </motion.svg>
   );
 }

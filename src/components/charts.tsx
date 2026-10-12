@@ -9,11 +9,11 @@ import { inrShort } from '../lib/format';
 function ChartTip({ active, payload, label }: { active?: boolean; payload?: { name: string; value: number; color?: string }[]; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-line bg-[#fffdf7] px-3.5 py-2.5 shadow-xl">
+    <div className="rounded-xl border border-line bg-night2 px-3.5 py-2.5 shadow-xl">
       {label && <div className="mb-1 text-xs font-extrabold text-ink/60">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-2 text-[13px] font-bold">
-          <span className="h-2.5 w-2.5 rounded-full" style={{ background: p.color ?? '#E8A20C' }} />
+          <span className="h-2.5 w-2.5 rounded-full" style={{ background: p.color ?? '#F0B429' }} />
           <span className="text-ink/55">{p.name}:</span>
           <span>{inrShort(Number(p.value))}</span>
         </div>
@@ -27,12 +27,12 @@ export function MonthlyBars({ data }: { data: { label: string; income: number; c
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="h-[260px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }} barGap={5}>
-          <CartesianGrid strokeDasharray="3 6" stroke="#E5DCC6" vertical={false} />
-          <XAxis dataKey="label" tick={{ fontSize: 11.5, fontWeight: 700, fill: '#6b7a99' }} axisLine={false} tickLine={false} dy={6} />
-          <YAxis tick={{ fontSize: 11, fontWeight: 700, fill: '#6b7a99' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => inrShort(v)} width={64} />
-          <Tooltip content={<ChartTip />} cursor={{ fill: '#E8A20C22' }} />
-          <Bar name="Income" dataKey="income" fill="#0B6B4F" radius={[6, 6, 2, 2]} maxBarSize={26} animationDuration={900} />
-          <Bar name="Cost" dataKey="cost" fill="#C2491D" radius={[6, 6, 2, 2]} maxBarSize={26} animationDuration={900} />
+          <CartesianGrid strokeDasharray="3 6" stroke="#262b36" vertical={false} />
+          <XAxis dataKey="label" tick={{ fontSize: 11.5, fontWeight: 700, fill: '#8a93a6' }} axisLine={false} tickLine={false} dy={6} />
+          <YAxis tick={{ fontSize: 11, fontWeight: 700, fill: '#8a93a6' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => inrShort(v)} width={64} />
+          <Tooltip content={<ChartTip />} cursor={{ fill: '#F0B42922' }} />
+          <Bar name="Income" dataKey="income" fill="#2FA37C" radius={[6, 6, 2, 2]} maxBarSize={26} animationDuration={900} />
+          <Bar name="Cost" dataKey="cost" fill="#E0603C" radius={[6, 6, 2, 2]} maxBarSize={26} animationDuration={900} />
         </BarChart>
       </ResponsiveContainer>
     </motion.div>
@@ -79,15 +79,15 @@ export function ProfitLine({ data }: { data: { label: string; profit: number }[]
         <AreaChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
           <defs>
             <linearGradient id="profitFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#E8A20C" stopOpacity={0.45} />
-              <stop offset="100%" stopColor="#E8A20C" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="#F0B429" stopOpacity={0.45} />
+              <stop offset="100%" stopColor="#F0B429" stopOpacity={0.02} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 6" stroke="#E5DCC6" vertical={false} />
-          <XAxis dataKey="label" tick={{ fontSize: 11.5, fontWeight: 700, fill: '#6b7a99' }} axisLine={false} tickLine={false} dy={6} />
-          <YAxis tick={{ fontSize: 11, fontWeight: 700, fill: '#6b7a99' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => inrShort(v)} width={64} />
-          <Tooltip content={<ChartTip />} cursor={{ stroke: '#E8A20C', strokeDasharray: '4 4' }} />
-          <Area name="Net Profit" type="monotone" dataKey="profit" stroke="#9A6200" strokeWidth={3} fill="url(#profitFill)" dot={{ r: 3.5, fill: '#E8A20C', strokeWidth: 0 }} activeDot={{ r: 5 }} animationDuration={1000} />
+          <CartesianGrid strokeDasharray="3 6" stroke="#262b36" vertical={false} />
+          <XAxis dataKey="label" tick={{ fontSize: 11.5, fontWeight: 700, fill: '#8a93a6' }} axisLine={false} tickLine={false} dy={6} />
+          <YAxis tick={{ fontSize: 11, fontWeight: 700, fill: '#8a93a6' }} axisLine={false} tickLine={false} tickFormatter={(v: number) => inrShort(v)} width={64} />
+          <Tooltip content={<ChartTip />} cursor={{ stroke: '#F0B429', strokeDasharray: '4 4' }} />
+          <Area name="Net Profit" type="monotone" dataKey="profit" stroke="#FFC94D" strokeWidth={3} fill="url(#profitFill)" dot={{ r: 3.5, fill: '#F0B429', strokeWidth: 0 }} activeDot={{ r: 5 }} animationDuration={1000} />
         </AreaChart>
       </ResponsiveContainer>
     </motion.div>

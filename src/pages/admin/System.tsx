@@ -526,7 +526,7 @@ export function SettingsPage() {
             </div>
             <div className="p-4">
               <div className="text-[11px] font-extrabold tracking-widest text-ink/40 uppercase">Budget health preview</div>
-              <div className="mt-2"><ProgressBar value={62} color="#0B6B4F" /></div>
+              <div className="mt-2"><ProgressBar value={62} color="#2FA37C" /></div>
             </div>
           </div>
           <Btn className="mt-4" onClick={saveBusiness}>Save Business Details</Btn>

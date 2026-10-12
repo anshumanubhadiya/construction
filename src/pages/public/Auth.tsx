@@ -14,7 +14,9 @@ function Shell({ children, side }: { children: ReactNode; side: ReactNode }) {
   return (
     <div className="grid min-h-screen lg:grid-cols-[1fr_1fr]">
       {/* brand panel */}
-      <div className="relative hidden overflow-hidden bg-night text-white lg:block">
+      <div className="grain relative hidden overflow-hidden bg-night text-white lg:block">
+        <img src="/img/night-cranes.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/60 to-night/30" />
         <div className="blueprint-dark pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-gold/15 blur-[110px]" />
         <div className="pointer-events-none absolute -right-32 -bottom-32 h-96 w-96 rounded-full bg-forest/25 blur-[110px]" />
@@ -80,7 +82,7 @@ export function SetupBanner({ compact = false }: { compact?: boolean }) {
         <button
           disabled={busy}
           onClick={() => { setBusy(true); void checkSchema().finally(() => setBusy(false)); }}
-          className="cursor-pointer rounded-xl border-[1.5px] border-gold/60 bg-white/70 px-3.5 py-2 text-[12px] font-extrabold text-bronze transition hover:border-gold disabled:opacity-60"
+          className="cursor-pointer rounded-xl border-[1.5px] border-gold/60 bg-white/5 px-3.5 py-2 text-[12px] font-extrabold text-bronze transition hover:border-gold disabled:opacity-60"
         >{busy ? 'Checking…' : 'Done? Re-check'}</button>
       </div>
     </div>

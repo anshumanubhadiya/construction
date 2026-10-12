@@ -1,35 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-display: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-paper: #faf7f1;
-  --color-cream: #f2ecdd;
-  --color-parchment: #e9e0cb;
-  --color-ink: #1b1e27;
-  --color-ink2: #262b3a;
-  --color-night: #14161d;
-  --color-night2: #1d212c;
-  --color-line: #e5dcc6;
-  --color-linen: #efe8d6;
+  /* ── cinematic night surfaces ── */
+  --color-paper: #0d0e12;
+  --color-cream: #14161c;
+  --color-parchment: #1b1e26;
+  --color-ink: #edeae1;
+  --color-ink2: #d8d5cb;
+  --color-night: #07080b;
+  --color-night2: #101218;
+  --color-line: #262b36;
+  --color-linen: #1d222c;
 
-  --color-gold: #e8a20c;
-  --color-goldsoft: #f6c453;
-  --color-golddeep: #9a6200;
-  --color-bronze: #7c4a12;
+  /* ── safety amber accents ── */
+  --color-gold: #f0b429;
+  --color-goldsoft: #ffd166;
+  --color-golddeep: #d9a441;
+  --color-bronze: #c98f3d;
 
-  --color-forest: #0b6b4f;
-  --color-mint: #d9f2e6;
-  --color-clay: #c2491d;
-  --color-blush: #fbe3d8;
-  --color-steel: #2563eb;
-  --color-skywash: #dbe7ff;
-  --color-plum: #7c3aed;
-  --color-plumwash: #e7dcff;
-  --color-tealpop: #0d9488;
-  --color-tealwash: #d3f3ef;
-  --color-amberwash: #fdf0cd;
+  /* ── status tints (dark-friendly) ── */
+  --color-forest: #2fa37c;
+  --color-mint: #10322a;
+  --color-clay: #e0603c;
+  --color-blush: #3a1d16;
+  --color-steel: #6b93ff;
+  --color-skywash: #16233f;
+  --color-plum: #a78bfa;
+  --color-plumwash: #241a3d;
+  --color-tealpop: #2dd4bf;
+  --color-tealwash: #0f2e2c;
+  --color-amberwash: #322610;
 }
 
 html {
@@ -44,20 +48,41 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background: var(--color-gold);
+  color: #0d0e12;
+}
+
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 /* ---------- scrollbar ---------- */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-track { background: #0a0b0e; }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d8cba6, #b7a67e);
+  background: linear-gradient(180deg, #3a3f4c, #23272f);
   border-radius: 99px;
-  border: 2px solid var(--color-paper);
+  border: 2px solid #0a0b0e;
 }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #f0b429, #b07f14); }
 .dark-scroll::-webkit-scrollbar-thumb { border-color: var(--color-night); }
+
+/* ---------- film grain overlay ---------- */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
+}
 
 /* ---------- shimmer skeleton ---------- */
 @keyframes shimmer {
@@ -65,12 +90,12 @@ body {
   100% { background-position: 400px 0; }
 }
 .shimmer {
-  background: linear-gradient(90deg, #ece4d1 25%, #f7f2e4 45%, #ece4d1 65%);
+  background: linear-gradient(90deg, #191c24 25%, #232836 45%, #191c24 65%);
   background-size: 800px 100%;
   animation: shimmer 1.4s ease infinite;
 }
 .shimmer-dark {
-  background: linear-gradient(90deg, #232838 25%, #2e3547 45%, #232838 65%);
+  background: linear-gradient(90deg, #191c24 25%, #232836 45%, #191c24 65%);
   background-size: 800px 100%;
   animation: shimmer 1.4s ease infinite;
 }
@@ -83,11 +108,18 @@ body {
 .animate-floaty { animation: floaty 5s ease-in-out infinite; }
 .animate-floaty-slow { animation: floaty 8s ease-in-out infinite; }
 
+/* ---------- marquees ---------- */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 .animate-marquee { animation: marquee 28s linear infinite; }
+.animate-marquee-fast { animation: marquee 18s linear infinite; }
+.animate-marquee-slow { animation: marquee 46s linear infinite; }
+.marquee-reverse { animation-direction: reverse; }
+.marquee-paused:hover .animate-marquee,
+.marquee-paused:hover .animate-marquee-fast,
+.marquee-paused:hover .animate-marquee-slow { animation-play-state: paused; }
 
 @keyframes spin-slow { to { transform: rotate(360deg); } }
 .animate-spin-slow { animation: spin-slow 22s linear infinite; }
@@ -98,11 +130,18 @@ body {
 }
 .animate-pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
 
+/* ---------- crane hook sway ---------- */
+@keyframes sway {
+  0%, 100% { transform: rotate(-2.2deg); }
+  50% { transform: rotate(2.2deg); }
+}
+.animate-sway { animation: sway 6s ease-in-out infinite; transform-origin: top center; }
+
 /* ---------- blueprint grid backdrop ---------- */
 .blueprint {
   background-image:
-    linear-gradient(rgba(232, 162, 12, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232, 162, 12, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(240, 180, 41, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 180, 41, 0.06) 1px, transparent 1px);
   background-size: 34px 34px;
 }
 .blueprint-dark {
@@ -111,24 +150,16 @@ body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
   background-size: 34px 34px;
 }
-.grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-}
 
 /* ---------- cards ---------- */
 .card-paper {
-  background: #fffdf7;
+  background: #14161c;
   border: 1px solid var(--color-line);
-  box-shadow: 0 1px 2px rgba(60, 45, 10, 0.06), 0 12px 32px -18px rgba(60, 45, 10, 0.25);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 44px -22px rgba(0, 0, 0, 0.85);
 }
 .card-night {
-  background: linear-gradient(160deg, #1d212c, #14161d);
-  border: 1px solid #2b3143;
+  background: linear-gradient(160deg, #14161d, #0a0b0f);
+  border: 1px solid #262b36;
 }
 .tap-lift { transition: transform 0.18s ease, box-shadow 0.18s ease; }
 .tap-lift:hover { transform: translateY(-3px); }
@@ -138,7 +169,7 @@ body {
   width: 100%;
   border-radius: 12px;
   border: 1.5px solid var(--color-line);
-  background: #fffdf8;
+  background: #101319;
   padding: 0.65rem 0.9rem;
   font-size: 0.9rem;
   font-weight: 500;
@@ -148,10 +179,35 @@ body {
 }
 .field:focus {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 3px rgba(232, 162, 12, 0.18);
+  box-shadow: 0 0 0 3px rgba(240, 180, 41, 0.16);
 }
-.field::placeholder { color: #a89c83; font-weight: 400; }
+.field::placeholder { color: #6d7484; font-weight: 400; }
 select.field { appearance: none; }
+select.field option { background: #14161c; color: var(--color-ink); }
+input[type="date"].field::-webkit-calendar-picker-indicator,
+input[type="month"].field::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+
+/* ---------- landing display type ---------- */
+.headline-xl {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.outline-type {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(237, 234, 225, 0.42);
+}
+.outline-type-gold {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(240, 180, 41, 0.75);
+}
+
+/* ---------- hover image zoom ---------- */
+.img-zoom { overflow: hidden; }
+.img-zoom img { transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease; }
+.img-zoom:hover img { transform: scale(1.06); }
 
 /* ---------- toast progress ---------- */
 @keyframes toastbar { from { width: 100%; } to { width: 0%; } }

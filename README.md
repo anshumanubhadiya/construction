@@ -73,3 +73,11 @@ Share the HTTPS URL — mobile browsers get full camera upload (Android) and can
 ### Known production hardening (optional later)
 - Tighten client/worker *read* policies to row-scoped (e.g. worker sees only own attendance) — current reads are "any active logged-in user", right-sized for a single-business app.
 - Add your own domain + custom SMTP in Supabase so reset emails come from `@yourdomain`.
+
+## 6 · Design language (cinematic refresh)
+
+The whole product now wears one identity — a **night-black, safety-amber "site at dusk"** look inspired by studio sites like dg-cinema.com, rebuilt for construction:
+
+- **Public landing** (`/`): film-grain overlay, full-bleed image marquee, staggered display type (Bricolage Grotesque), project collage with an *about project* modal, team wall, careers band, expandable service cards and a validated enquiry form.
+- **Backend (Thekedar OS)**: same tokens — `paper/night/ink/line` surfaces flipped to dark, amber focus rings, dark cards/fields/charts — so the owner cockpit, portals and PDFs feel like one product. Print/PDF output stays light on purpose.
+- **Photos**: site imagery lives in `public/img/` (sourced from the web, optimised JPEGs). Swap any file with the same name to rebrand a section instantly.
