@@ -56,9 +56,8 @@ export function AnimatedCounter({ value, format }: { value: number; format?: (n:
 export function Logo({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-[#F5EFE6] shadow-lg shadow-black/20">
-        <img src="/logo.svg" alt="Sarvotam Construction logo" className="h-full w-full object-cover" />
-        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-white/15 ring-inset" />
+      <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-white/5 ring-1 ring-white/10 ring-inset shadow-lg shadow-black/20">
+        <img src="/logo-mark.svg" alt="Sarvotam Construction logo" className="h-7 w-7 object-contain" />
       </div>
       {!compact && (
         <div className="leading-tight">

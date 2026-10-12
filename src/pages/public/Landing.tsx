@@ -220,8 +220,8 @@ function Header({ onMenu }: { onMenu: () => void }) {
     >
       <div className="mx-auto flex max-w-[1500px] items-center gap-4 px-5 py-3.5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="block h-9 w-9 overflow-hidden rounded-lg bg-[#F5EFE6]">
-            <img src="/logo.svg" alt="Sarvotam Construction logo" className="h-full w-full object-cover" />
+          <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-lg bg-white/5 ring-1 ring-white/10 ring-inset">
+            <img src="/logo-mark.svg" alt="Sarvotam Construction logo" className="h-6 w-6 object-contain" />
           </span>
           <span className="leading-none">
             <span className="font-display block text-[16px] font-bold tracking-tight text-ink">SARVOTAM</span>
@@ -826,8 +826,8 @@ function Footer() {
         <div className="grid gap-10 pb-14 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="block h-10 w-10 overflow-hidden rounded-lg bg-[#F5EFE6]">
-                <img src="/logo.svg" alt="Sarvotam Construction logo" className="h-full w-full object-cover" />
+              <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-white/5 ring-1 ring-white/10 ring-inset">
+                <img src="/logo-mark.svg" alt="Sarvotam Construction logo" className="h-7 w-7 object-contain" />
               </span>
               <span className="leading-none">
                 <span className="font-display block text-lg font-bold text-ink">SARVOTAM</span>
